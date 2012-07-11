@@ -10,8 +10,8 @@ installation
 * invoke as root
     update-rc.d Xvfb defaults
 * Optionally create the file /etc/default/Xvfb
-  and override the default values for DAEMON_ARGS and PIDFILE variables:
-    DAEMON_ARGS=":99 -ac -screen 0 1024x768x16"
+  and override the default values for XVFB_ARGS and PIDFILE variables:
+    XVFB_ARGS=":99 -ac -screen 0 1024x768x16"
     PIDFILE=/var/run/my_custom_xvfb.pid
 
 notes

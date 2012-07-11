@@ -14,11 +14,16 @@
 NAME=Xvfb
 DESC="$NAME - X Virtual Frame Buffer"
 SCRIPTNAME=/etc/init.d/$NAME
-DAEMON=/usr/bin/Xvfb
-DAEMON_ARGS=":99 -ac -screen 0 1024x768x16"
+XVFB=/usr/bin/Xvfb
+XVFB_ARGS=":99 -ac -screen 0 1024x768x16"
 PIDFILE=/var/run/${NAME}.pid
 
 set -e
+
+if [ `id -u` -ne 0 ]; then
+  echo "You need root privileges to run this script"
+  exit 1
+fi
 
 [ -x $XVFB ] || exit 0
 
@@ -29,7 +34,7 @@ set -e
 case "$1" in
   start)
     log_daemon_msg "Starting $DESC" "$NAME"
-    if start-stop-daemon --start --quiet --oknodo --pidfile $PIDFILE --background --make-pidfile --exec $DAEMON -- $DAEMON_ARGS ; then
+    if start-stop-daemon --start --quiet --oknodo --pidfile $PIDFILE --background --make-pidfile --exec $XVFB -- $XVFB_ARGS ; then
       log_end_msg 0
     else
       log_end_msg 1
@@ -49,7 +54,7 @@ case "$1" in
     $0 stop && sleep 2 && $0 start
     ;;
   status)
-    status_of_proc -p $PIDFILE $DAEMON $NAME && exit 0 || exit $?
+    status_of_proc -p $PIDFILE $XVFB $NAME && exit 0 || exit $?
     ;;
   *)
     log_action_msg "Usage: ${SCRIPTNAME} {start|stop|status|restart|force-reload}"
